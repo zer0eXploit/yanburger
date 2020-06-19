@@ -1,0 +1,12 @@
+@media (min-width: 499px) {
+  .HumbergerMenu {
+    display: none;
+  }
+}
+
+.HumbergerMenu div {
+  width: 35px;
+  height: 3px;
+  background-color: white;
+  margin: 6px 0;
+}

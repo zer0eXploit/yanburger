@@ -33,14 +33,14 @@ class BurgerBuilder extends Component {
       })
       .catch((e) => {
         console.log(e);
-        this.setState({
-          ingredients: {
-            meat: 2,
-            cheese: 0,
-            salad: 0,
-            bacon: 0,
-          },
-        });
+        // this.setState({
+        //   ingredients: {
+        //     meat: 2,
+        //     cheese: 0,
+        //     salad: 0,
+        //     bacon: 0,
+        //   },
+        // });
       });
   }
 
@@ -63,30 +63,22 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        address: {
-          name: "Yan Waipann",
-          zipCode: "11041",
-          country: "Myanmar",
-        },
-        email: "yanwaipann@yanburger.com",
-      },
-      deliveryMethod: "FastestMode",
-    };
-    axios
-      .post("/orders.json", order)
-      .then((res) => {
-        console.log(res);
-        this.setState({ loading: false, purchasing: false });
-      })
-      .catch((e) => {
-        console.log(e.message);
-        this.setState({ loading: false, purchasing: false });
-      });
+    const queryParams = [];
+
+    queryParams.push(`totalPrice=${this.state.totalPrice}`);
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString,
+    });
   };
 
   addIngredientHandler = (type) => {
@@ -120,14 +112,18 @@ class BurgerBuilder extends Component {
   };
 
   render() {
-    const disabledCtrlInfo = { ...this.state.ingredients };
+    const disabledCtrlInfo = { ...this.state.ingredients }; //i.e., which controls are disabled
 
     for (let key in disabledCtrlInfo) {
       disabledCtrlInfo[key] = disabledCtrlInfo[key] <= 0;
     }
 
     let orderSummary = null;
-    let burger = <Spinner />;
+    let burger = (
+      <div style={{ marginTop: "15%" }}>
+        <Spinner />
+      </div>
+    );
 
     if (this.state.ingredients) {
       burger = (

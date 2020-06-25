@@ -1,0 +1,30 @@
+.Order {
+  width: 80%;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px #ccc;
+  padding: 15px;
+  margin: 10px auto;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.IngredientsContainer span {
+  text-transform: capitalize;
+  display: inline-block;
+  margin: 4px 8px;
+  border: 1px solid grey;
+  padding: 5px;
+  min-width: 105px;
+  text-align: center;
+}
+
+@media (max-width: 540px) {
+  .Order {
+    text-align: center;
+  }
+}
+@media (min-width: 760px) {
+  .Order {
+    width: 600px;
+  }
+}

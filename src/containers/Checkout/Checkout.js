@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef, Fragment } from "react";
 import { Route } from "react-router-dom";
 
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
@@ -10,6 +10,8 @@ class Checkout extends Component {
     totalPrice: 0,
   };
 
+  contactFormRef = createRef();
+
   checkoutCancelHandler = () => {
     this.props.history.goBack();
   };
@@ -17,6 +19,12 @@ class Checkout extends Component {
   checkoutContinueHandler = () => {
     this.props.history.replace("/checkout/contact-info");
   };
+
+  componentDidUpdate() {
+    this.contactFormRef.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
 
   UNSAFE_componentWillMount() {
     let ingredients = {};
@@ -34,12 +42,15 @@ class Checkout extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <CheckoutSummary
           continue={this.checkoutContinueHandler}
           cancel={this.checkoutCancelHandler}
           ingredients={this.state.ingredients}
         />
+        <div ref={this.contactFormRef}>
+          {/* {Empty div for scroll target!} */}
+        </div>
         <Route
           path={this.props.match.path + "/contact-info"}
           render={(props) => {
@@ -52,7 +63,7 @@ class Checkout extends Component {
             );
           }}
         />
-      </div>
+      </Fragment>
     );
   }
 }

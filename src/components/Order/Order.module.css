@@ -8,6 +8,10 @@
   text-align: left;
 }
 
+.IngredientsContainer {
+  text-align: center;
+}
+
 .IngredientsContainer span {
   text-transform: capitalize;
   display: inline-block;

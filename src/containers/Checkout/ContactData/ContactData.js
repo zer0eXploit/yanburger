@@ -1,7 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
+import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
+
+import { purchaseBurger } from "../../../store/actions/index";
 
 import styles from "./ContactData.module.css";
 
@@ -156,8 +161,6 @@ class ContactData extends Component {
     if (!this.state.overAllValid) {
       return null;
     }
-
-    this.setState({ loading: true });
     const orderData = {};
     for (let key in this.state.orderForm) {
       orderData[key] = this.state.orderForm[key].value;
@@ -166,17 +169,10 @@ class ContactData extends Component {
       ingredients: this.props.ingredients,
       price: this.props.price,
       orderData,
+      date: new Date(),
     };
-    axios
-      .post("/orders.json", order)
-      .then((res) => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch((e) => {
-        console.log(e.message);
-        this.setState({ loading: false });
-      });
+
+    this.props.onOrderBurger(order);
   };
 
   render() {
@@ -214,7 +210,7 @@ class ContactData extends Component {
       </form>
     );
 
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
 
@@ -227,4 +223,22 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.burger.ingredients,
+    price: state.burger.totalPrice,
+    loading: state.order.loading,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOrderBurger: (orderData) => {
+      dispatch(purchaseBurger(orderData));
+    },
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));

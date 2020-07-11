@@ -9,12 +9,12 @@ import { fetchOrdersStart } from "../../store/actions/index";
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.orderFetchHandler();
+    this.props.orderFetchHandler(this.props.token, this.props.userId);
   }
 
   render() {
     return this.props.loading ? (
-      <div style={{ marginTop: "50%" }}>
+      <div style={{ marginTop: "15%" }}>
         <Spinner />
       </div>
     ) : (
@@ -37,13 +37,15 @@ const mapStateToProps = (state) => {
   return {
     orders: state.order.orders,
     loading: state.order.loading,
+    token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    orderFetchHandler: () => {
-      dispatch(fetchOrdersStart());
+    orderFetchHandler: (token, userId) => {
+      dispatch(fetchOrdersStart(token, userId));
     },
   };
 };

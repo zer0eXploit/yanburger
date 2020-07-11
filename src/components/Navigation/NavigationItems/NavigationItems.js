@@ -7,7 +7,12 @@ const navItems = (props) => (
     <NavItem link="/" exact>
       Burger Builder
     </NavItem>
-    <NavItem link="/orders">Orders</NavItem>
+    {props.isAuth ? <NavItem link="/orders">Orders</NavItem> : null}
+    {props.isAuth ? (
+      <NavItem link="/logout">Logout</NavItem>
+    ) : (
+      <NavItem link="/auth">Authenticate</NavItem>
+    )}
   </ul>
 );
 

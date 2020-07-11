@@ -8,10 +8,12 @@ import * as serviceWorker from "./serviceWorker";
 import thunk from "redux-thunk";
 import orderReducer from "./store/reducers/order";
 import ingredientsReducer from "./store/reducers/burgerBuilder";
+import authReducer from "./store/reducers/auth";
 
 const rootReducer = combineReducers({
   burger: ingredientsReducer,
   order: orderReducer,
+  auth: authReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

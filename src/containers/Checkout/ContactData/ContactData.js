@@ -7,6 +7,7 @@ import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 
 import { purchaseBurger } from "../../../store/actions/index";
+import { updateObject } from "../../../shared/utility";
 
 import styles from "./ContactData.module.css";
 
@@ -129,22 +130,21 @@ class ContactData extends Component {
   }
 
   onChangeHandler = (event, elementIdentifier) => {
-    const newOrderForm = {
-      ...this.state.orderForm,
-    };
-
-    const newOrderElement = {
-      ...newOrderForm[elementIdentifier],
-    };
-
-    newOrderElement.value = event.target.value;
-    newOrderElement.valid = this.validityCheck(
-      newOrderElement.validityCheck,
-      newOrderElement.value
+    const updatedFormElement = updateObject(
+      this.state.orderForm[elementIdentifier],
+      {
+        value: event.target.value,
+        valid: this.validityCheck(
+          this.state.orderForm[elementIdentifier].validityCheck,
+          event.target.value
+        ),
+        touched: true,
+      }
     );
-    newOrderElement.touched = true;
 
-    newOrderForm[elementIdentifier] = newOrderElement;
+    const newOrderForm = updateObject(this.state.orderForm, {
+      [elementIdentifier]: updatedFormElement,
+    });
 
     let overAllValidity = true;
 
@@ -152,7 +152,6 @@ class ContactData extends Component {
       overAllValidity = newOrderForm[key].valid && overAllValidity;
     }
 
-    console.log(newOrderForm);
     this.setState({ orderForm: newOrderForm, overAllValid: overAllValidity });
   };
 

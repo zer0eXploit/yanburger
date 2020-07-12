@@ -5,6 +5,7 @@ import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { auth, setAuthRedirectPath } from "../../store/actions/index";
+import { updateObject } from "../../shared/utility";
 
 import styles from "./Auth.module.css";
 
@@ -80,18 +81,22 @@ class Authentication extends Component {
   };
 
   onChangeHandler = (event, elementIdentifier) => {
-    const updatedControls = {
-      ...this.state.controls,
-      [elementIdentifier]: {
-        ...this.state.controls[elementIdentifier],
+    const updatedElement = updateObject(
+      this.state.controls[elementIdentifier],
+      {
         value: event.target.value,
         valid: this.validityCheck(
           this.state.controls[elementIdentifier].validityCheck,
           event.target.value
         ),
         touched: true,
-      },
-    };
+      }
+    );
+
+    const updatedControls = updateObject(this.state.controls, {
+      [elementIdentifier]: updatedElement,
+    });
+
     this.setState({ controls: updatedControls });
   };
 
@@ -103,6 +108,7 @@ class Authentication extends Component {
       this.state.isSignUp
     );
   };
+
   render() {
     const formElementsArray = [];
     for (let key in this.state.controls) {

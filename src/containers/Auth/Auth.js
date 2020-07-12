@@ -43,6 +43,7 @@ class Authentication extends Component {
         touched: false,
       },
     },
+    allInputValid: false,
     isSignUp: true,
   };
 
@@ -75,7 +76,7 @@ class Authentication extends Component {
   }
 
   switchFormMode = () => {
-    if (this.props.error.message) {
+    if (this.props.error) {
       this.props.error.message = "";
     }
     this.setState((prevState) => ({
@@ -100,7 +101,16 @@ class Authentication extends Component {
       [elementIdentifier]: updatedElement,
     });
 
-    this.setState({ controls: updatedControls });
+    let overAllValidity = true;
+
+    for (let key in updatedControls) {
+      overAllValidity = updatedControls[key].valid && overAllValidity;
+    }
+
+    this.setState({
+      controls: updatedControls,
+      allInputValid: overAllValidity,
+    });
   };
 
   onSubmitHandler = (event) => {
@@ -141,7 +151,9 @@ class Authentication extends Component {
             />
           );
         })}
-        <Button btnType="Success">Submit</Button>
+        <Button btnType="Success" disabled={!this.state.allInputValid}>
+          Submit
+        </Button>
       </form>
     );
 

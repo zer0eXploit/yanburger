@@ -40,7 +40,7 @@ class App extends Component {
     const checkoutRouteComponent = (
       <Route
         path="/checkout"
-        render={() => {
+        render={(props) => {
           return (
             <Suspense
               fallback={
@@ -49,7 +49,7 @@ class App extends Component {
                 </div>
               }
             >
-              <Checkout />
+              <Checkout {...props} />
             </Suspense>
           );
         }}

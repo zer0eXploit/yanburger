@@ -75,6 +75,9 @@ class Authentication extends Component {
   }
 
   switchFormMode = () => {
+    if (this.props.error.message) {
+      this.props.error.message = "";
+    }
     this.setState((prevState) => ({
       isSignUp: !prevState.isSignUp,
     }));

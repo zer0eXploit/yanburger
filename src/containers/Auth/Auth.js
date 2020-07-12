@@ -153,11 +153,14 @@ class Authentication extends Component {
     }
     return (
       <div className={styles.Auth}>
+        <h2>{this.state.isSignUp ? "Sign Up" : "Login"}</h2>
         {this.props.isAuth ? <Redirect to={this.props.redirectPath} /> : null}
         {errorMessage}
         {form}
         <Button btnType="Danger" click={this.switchFormMode}>
-          Switch To {this.state.isSignUp ? "Login" : "Signup"}
+          <span style={{ border: "1px solid #ccc", padding: "7px" }}>
+            Switch To {this.state.isSignUp ? "Login" : "Signup"}
+          </span>
         </Button>
       </div>
     );

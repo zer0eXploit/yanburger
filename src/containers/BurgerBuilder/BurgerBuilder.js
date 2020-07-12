@@ -63,7 +63,7 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
     let burger = this.props.error ? (
-      <p style={{ marginTop: "50%", textAlign: "center" }}>
+      <p style={{ marginTop: "20%", textAlign: "center" }}>
         Ingredients can't be loaded!
       </p>
     ) : (

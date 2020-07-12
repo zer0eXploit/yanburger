@@ -67,7 +67,7 @@ class BurgerBuilder extends Component {
         Ingredients can't be loaded!
       </p>
     ) : (
-      <div style={{ marginTop: "15%" }}>
+      <div style={{ marginTop: "20%" }}>
         <Spinner />
       </div>
     );

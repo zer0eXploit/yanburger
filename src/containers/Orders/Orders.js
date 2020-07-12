@@ -14,7 +14,7 @@ class Orders extends Component {
 
   render() {
     return this.props.loading ? (
-      <div style={{ marginTop: "15%" }}>
+      <div style={{ marginTop: "20%" }}>
         <Spinner />
       </div>
     ) : (

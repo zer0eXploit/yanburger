@@ -1,14 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import "./App.css";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 import Layout from "./hoc/Layout/Layout";
-import Checkout from "./containers/Checkout/Checkout";
-import Orders from "./containers/Orders/Orders";
-import Authentication from "./containers/Auth/Auth";
+import Spinner from "./components/UI/Spinner/Spinner";
 import Logout from "./containers/Auth/Logout/Logout";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { autoAuth } from "./store/actions/index";
+
+const Authentication = React.lazy(() => import("./containers/Auth/Auth"));
+const Orders = React.lazy(() => import("./containers/Orders/Orders"));
+const Checkout = React.lazy(() => import("./containers/Checkout/Checkout"));
 
 class App extends Component {
   componentDidMount() {
@@ -16,9 +18,66 @@ class App extends Component {
   }
 
   render() {
+    const authRouteComponent = (
+      <Route
+        path="/auth"
+        render={() => {
+          return (
+            <Suspense
+              fallback={
+                <div style={{ marginTop: "20%" }}>
+                  <Spinner />
+                </div>
+              }
+            >
+              <Authentication />
+            </Suspense>
+          );
+        }}
+      />
+    );
+
+    const checkoutRouteComponent = (
+      <Route
+        path="/checkout"
+        render={() => {
+          return (
+            <Suspense
+              fallback={
+                <div style={{ marginTop: "20%" }}>
+                  <Spinner />
+                </div>
+              }
+            >
+              <Checkout />
+            </Suspense>
+          );
+        }}
+      />
+    );
+
+    const orderRouteComponent = (
+      <Route
+        path="/orders"
+        render={() => {
+          return (
+            <Suspense
+              fallback={
+                <div style={{ marginTop: "20%" }}>
+                  <Spinner />
+                </div>
+              }
+            >
+              <Orders />
+            </Suspense>
+          );
+        }}
+      />
+    );
+
     let routes = (
       <Switch>
-        <Route path="/auth" component={Authentication} />
+        {authRouteComponent}
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
@@ -27,10 +86,10 @@ class App extends Component {
     if (this.props.isAuth) {
       routes = (
         <Switch>
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/orders" component={Orders} />
+          {checkoutRouteComponent}
+          {orderRouteComponent}
+          {authRouteComponent}
           <Route path="/logout" component={Logout} />
-          <Route path="/auth" component={Authentication} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="/" />
         </Switch>
